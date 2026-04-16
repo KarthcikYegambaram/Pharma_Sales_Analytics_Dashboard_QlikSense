@@ -21,12 +21,16 @@ Pharmacy management teams require a centralized analytics solution to monitor bu
 
 This dashboard helps answer:
 
-- Which branches generate the highest revenue?
-- What are the top-selling medicines?
-- Which payment methods are most used?
-- How do customer age and gender impact sales?
-- Which provinces have the highest demand?
-- How are monthly sales trending?
+- What is the total sales revenue?
+- How many total transactions were completed?
+- What is the average transaction value?
+- How are sales trending month over month?
+- What are the year-over-year and month-over-month growth trends?
+- Which branch generates the highest revenue?
+- Which province contributes the most to total sales?
+- Which medicine generates the highest revenue?
+- Which medicine category contributes the most revenue?
+- How do discounts impact net revenue?
 
 ---
 
@@ -72,6 +76,8 @@ The project uses pharmacy transaction-level sales data.
 CSV / Excel Source Files
         ↓
 Qlik Load Script
+        ↓
+Qvd Generation 
         ↓
 Data Cleaning & Transformations
         ↓
