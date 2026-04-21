@@ -1,6 +1,6 @@
 # Pharmacy Sales Analytics Dashboard | Qlik Sense
 
-## 📌 Project Overview
+##  Project Overview
 
 This project is an interactive **Qlik Sense Sales Analytics Dashboard** built using pharmacy retail transaction data. The dashboard provides actionable insights into sales performance, branch efficiency, medicine demand, customer demographics, and payment behavior.
 
@@ -15,7 +15,7 @@ The goal of this project is to demonstrate practical skills in:
 
 ---
 
-## 🏥 Business Use Case
+## Business Use Case
 
 Pharmacy management teams require a centralized analytics solution to monitor business performance across multiple branches.
 
@@ -34,7 +34,7 @@ This dashboard helps answer:
 
 ---
 
-## 📂 Dataset Used
+## Dataset Used
 
 The project uses pharmacy transaction-level sales data.
 
@@ -70,7 +70,7 @@ The project uses pharmacy transaction-level sales data.
 
 ---
 
-## 🏗 Solution Architecture
+## Solution Architecture
 
 ```text
 CSV / Excel Source Files
