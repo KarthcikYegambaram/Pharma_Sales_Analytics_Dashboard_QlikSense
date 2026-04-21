@@ -1,0 +1,11 @@
+// Step : 1 - Generate QVD from raw data set
+
+Sales_Raw:
+LOAD
+    *
+FROM [lib://DataFiles/Pharma_sales_dataset.csv]
+(txt, codepage is 28591, embedded labels, delimiter is ',', msq);
+
+STORE Sales_Raw INTO [lib://DataFiles/QVD/Sales_Raw.qvd] (qvd);
+
+DROP TABLE Sales_Raw;
