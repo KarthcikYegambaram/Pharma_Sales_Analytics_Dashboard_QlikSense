@@ -1,0 +1,48 @@
+Fact_Sales:
+
+LOAD
+
+    // Primary Transaction Key
+    Transaction_ID,
+
+    // Canonical Calendar Link handled through BridgeDates
+    // Do not keep Transaction_Date / Expiry_Date here unless needed
+
+    
+    // Foreign Keys
+    Branch_ID,
+    
+    Medicine_ID,
+
+    AutoNumberHash128(Supplier_Name) as Supplier_Key,
+
+
+    // Degenerate / Mini Dimensions
+    Payment_Method,
+    Customer_Gender,
+    Customer_City,
+    Customer_Age,
+    Batch_No,
+
+
+    // Measures
+    Quantity,
+    Unit_Price_LKR,
+    Discount_Rate,
+    Line_Total_LKR,
+
+
+    // Derived Measures
+    Quantity * Unit_Price_LKR as Gross_Amount_LKR,
+
+    (Quantity * Unit_Price_LKR) - Line_Total_LKR as Discount_Amount_LKR,
+
+    If(Quantity<>0,
+        Line_Total_LKR / Quantity,
+        0) as Net_Unit_Price_LKR
+
+Resident Sales_Silver;
+
+
+
+DROP TABLE Sales_Silver;
