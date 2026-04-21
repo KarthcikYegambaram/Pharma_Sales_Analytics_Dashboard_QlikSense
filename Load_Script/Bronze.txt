@@ -1,0 +1,15 @@
+// Step : 2 - Raw Table Creation
+
+// Load Raw QVD for Profiling
+
+Sales_Bronze:
+LOAD *
+FROM [lib://DataFiles/QVD/Sales_Raw.qvd] (qvd);
+
+
+// A. Row Count
+LET vRowCountRaw = NoOfRows('Sales_Bronze');
+TRACE Total Rows = $(vRowCountRaw);
+
+LET vColCountRaw = NoOfFields('Sales_Bronze');
+TRACE Number of Columns = $(vColCountRaw);
