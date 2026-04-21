@@ -1,0 +1,78 @@
+BridgeDates:
+LOAD
+    Transaction_ID,
+    Transaction_Date as LinkDate,
+    'Transaction Date' as DateType
+Resident Sales_Silver;
+
+Concatenate (BridgeDates)
+LOAD
+    Transaction_ID,
+    Expiry_Date as LinkDate,
+    'Expiry Date' as DateType
+Resident Sales_Silver;
+
+
+
+TempDates:
+LOAD
+    Min(LinkDate) AS MinDate,
+    Max(LinkDate) AS MaxDate
+Resident BridgeDates;
+
+LET vMinDate = Num(Peek('MinDate', 0, 'TempDates'));
+LET vMaxDate = Num(Peek('MaxDate', 0, 'TempDates'));
+
+
+
+MasterCalendar:
+LOAD
+    Date($(vMinDate) + IterNo() - 1) AS LinkDate
+AUTOGENERATE 1
+WHILE $(vMinDate) + IterNo() - 1 <= $(vMaxDate);
+
+DROP TABLE TempDates;
+
+
+
+Calendar:
+LOAD
+    Date(LinkDate) as LinkDate,
+
+    Dual(Date(MonthStart(LinkDate), 'MMM-YYYY'),
+         MonthStart(LinkDate)) as MonthYear,
+
+    Dual('Q' & Ceil(Month(LinkDate)/3) & ' ' & Year(LinkDate),
+         Year(LinkDate) & Ceil(Month(LinkDate)/3)) as QuarterYear,
+
+    Dual(Year(LinkDate),
+         YearStart(LinkDate)) as Year,
+
+    If(LinkDate >= MonthStart(AddMonths($(vMaxDate), -11)),
+        Dual(Date(MonthStart(LinkDate), 'MMM-YYYY'),
+        MonthStart(LinkDate)),
+    Null()) as Rolling12Months,
+
+    If(Year(LinkDate) = Year($(vMaxDate))
+       and LinkDate <= $(vMaxDate), 1, 0) as AllYearYTDFlag_,
+
+    If(QuarterName(LinkDate) = QuarterName($(vMaxDate))
+       and LinkDate <= $(vMaxDate), 1, 0) as AllYearQTDFlag_,
+
+    If(Month(LinkDate) = Month($(vMaxDate))
+       and Year(LinkDate) = Year($(vMaxDate))
+       and LinkDate <= $(vMaxDate), 1, 0) as AllYearMTDFlag_,
+
+    If(
+        LinkDate >= MonthStart(AddMonths($(vMaxDate),-1))
+        and LinkDate <= AddMonths($(vMaxDate),-1),
+        1,0
+        )  as PrevMTDFlag_,
+
+    If(LinkDate >= MonthStart(AddMonths($(vMaxDate), -11)), 1, 0) as R12MFlag_,
+
+    1 as AllYearLTDFlag_
+
+Resident MasterCalendar;
+
+DROP TABLE MasterCalendar;
