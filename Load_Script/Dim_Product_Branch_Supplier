@@ -1,0 +1,30 @@
+Dim_Branch:
+
+LOAD DISTINCT
+    Branch_ID,
+    Branch_Name,
+    District,
+    Province
+Resident Sales_Silver;
+
+
+Dim_Product:
+
+LOAD DISTINCT
+    Medicine_ID,
+    Medicine_Name,
+    Strength,
+    Generic_Name,
+    Medicine_Category,
+    Dosage_Form,
+    Pack_Size,
+    Prescription_Required
+Resident Sales_Silver;
+
+
+Dim_Supplier:
+
+LOAD DISTINCT
+    AutoNumberHash128(Supplier_Name) as Supplier_Key,
+    Supplier_Name
+Resident Sales_Silver;
