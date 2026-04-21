@@ -1,0 +1,87 @@
+// Note : Ignore YEAR and MONTH columns 
+
+Sales_Silver:
+
+LOAD
+    Transaction_ID,
+    Transaction_Date,
+    Expiry_Date,
+    Branch_ID,
+    Branch_Name,
+    District,
+    Province,
+    Payment_Method,
+    Customer_Gender,
+    If(Len(Trim(Customer_City))=0,'Unknown',Customer_City) as Customer_City,
+    If(IsNull(Customer_Age),0,Customer_Age) as Customer_Age,
+    Medicine_ID,
+    Medicine_Name,
+    ExtractRegExI(lower(Medicine_Name),'[0-9]+(mg|g|ml)') as Strength,  // new column strength
+    Generic_Name,
+    Medicine_Category,
+    Dosage_Form,
+    
+    Pack_Size,
+    Supplier_Name,
+    If(Match(Upper(Prescription_Required),'YES','Y','TRUE'),'Yes','No') as Prescription_Required,
+    Batch_No,
+    Quantity,
+    Unit_Price_LKR,
+    If(IsNull(Discount_Rate),0,Discount_Rate) as Discount_Rate,
+    Line_Total_LKR
+
+;
+
+LOAD
+    Trim(Transaction_ID) as Transaction_ID,
+    Date(Date#(Transaction_Date,'MM/DD/YYYY')) as Transaction_Date,
+    
+    Date(Date#(Expiry_Date,'MM/DD/YYYY')) as Expiry_Date,
+
+    Upper(Trim(Branch_ID)) as Branch_ID,
+    Upper(Trim(SubField(Branch_Name,'-',-1))) as Branch_Name,
+    Capitalize(Trim(District)) as District,
+    Capitalize(Trim(Province)) as Province,
+
+    Upper(Trim(Payment_Method)) as Payment_Method,
+    If(Match(Upper(Trim(Customer_Gender)),'MALE','M'),'M',
+    If(Match(Upper(Trim(Customer_Gender)),'FEMALE','F'),'F',
+    'UNKNOWN')) as Customer_Gender,
+
+    Num#(Customer_Age) as Customer_Age,
+    Capitalize(Trim(Customer_City)) as Customer_City,
+
+    Upper(Trim(Medicine_ID)) as Medicine_ID,
+    Capitalize(Trim(Medicine_Name)) as Medicine_Name,
+    Capitalize(Trim(Generic_Name)) as Generic_Name,
+    Capitalize(Trim(Medicine_Category)) as Medicine_Category,
+
+    Upper(Trim(Dosage_Form)) as Dosage_Form,
+
+    Num#(Strength_mg) as Strength_mg,
+    
+    Num#(Pack_Size) as Pack_Size,
+
+    Upper(Trim(Supplier_Name)) as Supplier_Name,
+
+    Trim(Prescription_Required) as Prescription_Required,
+
+    Upper(Trim(Batch_No)) as Batch_No,
+
+    Num#(Quantity) as Quantity,
+    Num#(Unit_Price_LKR) as Unit_Price_LKR,
+    Num#(Discount_Rate) as Discount_Rate,
+    Num#(Line_Total_LKR) as Line_Total_LKR
+
+Resident Sales_Bronze;
+
+drop Table Sales_Bronze;
+
+STORE Sales_Silver INTO [lib://DataFiles/QVD/Sales_Silver.qvd] (qvd);
+
+// row and columns count for cleaned data
+LET vRowCountCleaned = NoOfRows('Sales_Silver');
+TRACE Total Rows = $(vRowCountCleaned);
+
+LET vColCountCleaned = NoOfFields('Sales_Silver');
+TRACE Number of Columns = $(vColCountCleaned);
