@@ -1,4 +1,4 @@
-// Step : 2 - Raw Table Creation
+// Step : 2 - Data Profiling + Data Cleaning + Data Validation
 
 // Load Raw QVD for Profiling
 
@@ -13,3 +13,58 @@ TRACE Total Rows = $(vRowCountRaw);
 
 LET vColCountRaw = NoOfFields('Sales_Bronze');
 TRACE Number of Columns = $(vColCountRaw);
+
+// // B. Null Count Per Column
+
+// Profiling_Nulls:
+// LOAD
+// Count(Transaction_ID) as TotalRows,
+// Count(Transaction_ID) as Transaction_ID_NotNull,
+// Count(Transaction_Date) as Transaction_Date_NotNull,
+// Count(Branch_ID) as Branch_ID_NotNull,
+// Count(Customer_Age) as Customer_Age_NotNull,
+// Count(Medicine_ID) as Medicine_ID_NotNull
+
+// Resident Sales_Bronze;
+
+// // C. Distinct Count
+// Profiling_Distinct:
+// LOAD
+// Count(DISTINCT Transaction_ID) as Distinct_Transactions,
+// Count(DISTINCT Branch_ID) as Distinct_Branches,
+// Count(DISTINCT Customer_City) as Distinct_Cities,
+// Count(DISTINCT Medicine_ID) as Distinct_Medicines
+// Resident Sales_Bronze;
+
+// // D. Min / Max / Avg Numeric Columns
+// Profiling_Numeric:
+// LOAD
+// Min(Customer_Age) as Min_Age,
+// Max(Customer_Age) as Max_Age,
+// Avg(Customer_Age) as Avg_Age,
+
+// Min(Unit_Price_LKR) as Min_Price,
+// Max(Unit_Price_LKR) as Max_Price,
+
+// Min(Quantity) as Min_Qty,
+// Max(Quantity) as Max_Qty
+
+// Resident Sales_Bronze;
+
+
+// // E. Duplicate Transaction Check
+// Duplicate_Check:
+// LOAD *
+// WHERE Cnt > 1;
+
+// LOAD
+//     Transaction_ID,
+//     Count(Transaction_ID) as Cnt
+// Resident Sales_Bronze
+// Group By Transaction_ID;
+
+// Prescription_check:
+// Load Distinct 
+// Prescription_Required
+
+// Resident Sales_Bronze;
